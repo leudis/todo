@@ -83,7 +83,7 @@ class TaskViewTests(APITestCase):
         response_list = self.client.get(url_list)
         
         list_content = json.loads(response_list.content)
-        print("tasks list completed ************************:" + str(list_content))
+        print("tasks list completed:" + str(list_content))
 
         self.assertEqual(response_list.status_code, status.HTTP_200_OK)
         self.assertEqual(len(list_content), 2)
