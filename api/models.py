@@ -22,10 +22,10 @@ class Task(models.Model):
     timestamp = models.DateTimeField(auto_now_add = True)
 
     def save(self, priority = None, *args, **kwargs):
-        util = Util(Task)
+        _util = Util(Task)
         
         if self.id == None:
-            new_max_priority = util.newMaxPriority()
+            new_max_priority = _util.newMaxPriority()
             self.priority = new_max_priority
         
         super().save(*args, **kwargs)

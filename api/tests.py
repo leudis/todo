@@ -21,7 +21,7 @@ class TaskViewTests(APITestCase):
 
         task_id = 1
         url_reprioritize = reverse('task-reprioritize', args=(task_id,))
-        response_reprioritize = self.client.get(url_reprioritize)
+        response_reprioritize = self.client.post(url_reprioritize)
         self.assertEqual(response_reprioritize.status_code, status.HTTP_200_OK)
         
         url_list = reverse('task-list')
@@ -40,7 +40,7 @@ class TaskViewTests(APITestCase):
         task_followed_by_reprioritized_id = 9
 
         url_reprioritize = reverse('task-reprioritize', args=(task_to_reprioritize_id,task_followed_by_reprioritized_id))
-        response_reprioritize = self.client.get(url_reprioritize)
+        response_reprioritize = self.client.post(url_reprioritize)
         self.assertEqual(response_reprioritize.status_code, status.HTTP_200_OK)
         
         url_list = reverse('task-list')
@@ -68,3 +68,22 @@ class TaskViewTests(APITestCase):
 
         self.assertEqual(response_list.status_code, status.HTTP_200_OK)
         self.assertEqual(len(list_content), 10)
+
+    def test_task_list_true(self):
+        tasks_create()
+
+        url_complete = reverse('task-complete', args=(7,))
+        response_list = self.client.post(url_complete)
+
+        url_complete = reverse('task-complete', args=(8,))
+        response_list = self.client.post(url_complete)
+
+        completed = "true"
+        url_list = reverse('task-list', kwargs={'completed': completed})
+        response_list = self.client.get(url_list)
+        
+        list_content = json.loads(response_list.content)
+        print("tasks list completed ************************:" + str(list_content))
+
+        self.assertEqual(response_list.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(list_content), 2)
